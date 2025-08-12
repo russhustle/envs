@@ -1,0 +1,73 @@
+[project]
+name = "torch-env"
+version = "0.1.0"
+description = "PyTorch environment with CUDA 12.1 support"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    # PyTorch with CUDA 12.1 support
+    "torch>=2.5.1",
+    "torchvision>=0.20.1",
+    "torchaudio>=2.5.1",
+    "torchtext>=0.17.0",
+    
+    # Data handling and utilities
+    "datasets>=3.1.0",
+    "tokenizers>=0.20.4",
+    
+    # Metrics and monitoring
+    "torchmetrics>=1.5.2",
+    "tensorboard>=2.18.0",
+    
+    # Visualization and experiment tracking
+    "altair>=5.5.0",
+    "wandb>=0.18.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+]
+
+[tool.uv]
+# Configure uv to use CUDA 12.1 compatible PyTorch
+index-url = "https://download.pytorch.org/whl/cu121"
+extra-index-url = ["https://pypi.org/simple"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu121" }
+torchvision = { index = "pytorch-cu121" }
+torchaudio = { index = "pytorch-cu121" }
+
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--cov",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
